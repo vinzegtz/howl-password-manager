@@ -1,14 +1,19 @@
 import sys
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QWidget
 
 
 # Howl Password Manager GUI
 class HowlPasswordManager(QMainWindow):
 
-    __centralWidget = None
+    centralWidget = None
 
     def __init__(self):
         super().__init__()
@@ -17,9 +22,40 @@ class HowlPasswordManager(QMainWindow):
         self.setWindowTitle('Howl Password Manager')
         self.setFixedSize(640, 360)
 
-        # Cental widget
-        self.__centralWidget = QWidget(self)
-        self.setCentralWidget(self.__centralWidget)
+        # Central widget and general layout
+        self.generalLayout = QVBoxLayout()
+        self.centralWidget = QWidget(self)
+        
+        self.centralWidget.setLayout(self.generalLayout)
+        self.setCentralWidget(self.centralWidget)
+
+        # Create GUI
+        self.__createMainInput()
+    
+
+    def __createMainInput(self):
+        self.generatePasswordLayout = QHBoxLayout()
+        self.passwordInput = QLineEdit()
+        self.generateButton = QPushButton()
+        self.copyButton = QPushButton()
+
+        # Set button properties
+        self.generateButton.setText('Generate')
+        self.copyButton.setText('Copy')
+
+        # Set input properties
+        self.passwordInput.setReadOnly(True)
+
+        # Add widgets to the main input layout
+        self.generatePasswordLayout.addWidget(self.generateButton)
+        self.generatePasswordLayout.addWidget(self.passwordInput)
+        self.generatePasswordLayout.addWidget(self.copyButton)
+
+        # Set layout properties
+        self.generatePasswordLayout.setAlignment(Qt.AlignTop)
+
+        # Add widgets to the general layout
+        self.generalLayout.addLayout(self.generatePasswordLayout)
 
 
 # Client
