@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
@@ -26,12 +27,29 @@ class HowlPasswordManager(QMainWindow):
         self.generalLayout = QVBoxLayout()
         self.centralWidget = QWidget(self)
         
+        self.generalLayout.setAlignment(Qt.AlignTop)
         self.centralWidget.setLayout(self.generalLayout)
         self.setCentralWidget(self.centralWidget)
 
         # Create GUI
+        self.__createHeader()
         self.__createMainInput()
     
+    def __createHeader(self):
+        self.headerLayout = QVBoxLayout()
+        self.mainTitle = QLabel()
+
+        # Set title properties
+        self.mainTitle.setText('<h1>Howl Password Manager</h1>')
+
+        # Add widgets to the header layout
+        self.headerLayout.addWidget(self.mainTitle)
+
+        # Set layout properties
+        # self.headerLayout.setAlignment(Qt.AlignTop)
+
+        # Add widgets to the general layout
+        self.generalLayout.addLayout(self.headerLayout)
 
     def __createMainInput(self):
         self.generatePasswordLayout = QHBoxLayout()
@@ -52,7 +70,7 @@ class HowlPasswordManager(QMainWindow):
         self.generatePasswordLayout.addWidget(self.copyButton)
 
         # Set layout properties
-        self.generatePasswordLayout.setAlignment(Qt.AlignTop)
+        # self.generatePasswordLayout.setAlignment(Qt.AlignTop)
 
         # Add widgets to the general layout
         self.generalLayout.addLayout(self.generatePasswordLayout)
