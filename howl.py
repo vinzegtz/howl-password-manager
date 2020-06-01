@@ -11,6 +11,20 @@ from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QWidget
 
 
+class HowlPasswordManagerController:
+    
+    def __init__(self, view):
+        self.__view = view
+        self.__connectSignals()
+    
+    def __connectSignals(self):
+        self.__view.generateButton.clicked.connect(lambda :self.__setRandomText())
+    
+    def __setRandomText(self):
+        self.__view.passwordInput.setText('Hello World!')
+        self.__view.passwordInput.setFocus()
+
+
 # Howl Password Manager GUI
 class HowlPasswordManager(QMainWindow):
 
@@ -84,6 +98,9 @@ def main():
     # Show main window
     mainView = HowlPasswordManager()
     mainView.show()
+
+    # Set view in the controller
+    HowlPasswordManagerController(view=mainView)
 
     # Main loop
     sys.exit(howl.exec())
