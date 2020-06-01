@@ -43,7 +43,7 @@ class HowlPasswordManager(QMainWindow):
         
         self.lytGeneral.setAlignment(Qt.AlignTop)
         self.wgtCentral.setLayout(self.lytGeneral)
-        self.setwgtCentral(self.wgtCentral)
+        self.setCentralWidget(self.wgtCentral)
 
         # Create GUI
         self.__createHeader()
