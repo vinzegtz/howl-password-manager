@@ -18,17 +18,17 @@ class HowlPasswordManagerController:
         self.__connectSignals()
     
     def __connectSignals(self):
-        self.__view.generateButton.clicked.connect(lambda :self.__setRandomText())
+        self.__view.btnGeneratePass.clicked.connect(lambda :self.__setRandomText())
     
     def __setRandomText(self):
-        self.__view.passwordInput.setText('Hello World!')
-        self.__view.passwordInput.setFocus()
+        self.__view.txtPassword.setText('Hello World!')
+        self.__view.txtPassword.setFocus()
 
 
 # Howl Password Manager GUI
 class HowlPasswordManager(QMainWindow):
 
-    centralWidget = None
+    wgtCentral = None
 
     def __init__(self):
         super().__init__()
@@ -38,56 +38,56 @@ class HowlPasswordManager(QMainWindow):
         self.setFixedSize(640, 360)
 
         # Central widget and general layout
-        self.generalLayout = QVBoxLayout()
-        self.centralWidget = QWidget(self)
+        self.lytGeneral = QVBoxLayout()
+        self.wgtCentral = QWidget(self)
         
-        self.generalLayout.setAlignment(Qt.AlignTop)
-        self.centralWidget.setLayout(self.generalLayout)
-        self.setCentralWidget(self.centralWidget)
+        self.lytGeneral.setAlignment(Qt.AlignTop)
+        self.wgtCentral.setLayout(self.lytGeneral)
+        self.setwgtCentral(self.wgtCentral)
 
         # Create GUI
         self.__createHeader()
         self.__createMainInput()
     
     def __createHeader(self):
-        self.headerLayout = QVBoxLayout()
-        self.mainTitle = QLabel()
+        self.lytHeader = QVBoxLayout()
+        self.lblMainTitle = QLabel()
 
         # Set title properties
-        self.mainTitle.setText('<h1>Howl Password Manager</h1>')
+        self.lblMainTitle.setText('<h1>Howl Password Manager</h1>')
 
         # Add widgets to the header layout
-        self.headerLayout.addWidget(self.mainTitle)
+        self.lytHeader.addWidget(self.lblMainTitle)
 
         # Set layout properties
-        # self.headerLayout.setAlignment(Qt.AlignTop)
+        # self.lytHeader.setAlignment(Qt.AlignTop)
 
         # Add widgets to the general layout
-        self.generalLayout.addLayout(self.headerLayout)
+        self.lytGeneral.addLayout(self.lytHeader)
 
     def __createMainInput(self):
-        self.generatePasswordLayout = QHBoxLayout()
-        self.passwordInput = QLineEdit()
-        self.generateButton = QPushButton()
-        self.copyButton = QPushButton()
+        self.lytGeneratePass = QHBoxLayout()
+        self.txtPassword = QLineEdit()
+        self.btnGeneratePass = QPushButton()
+        self.btnCopyPass = QPushButton()
 
         # Set button properties
-        self.generateButton.setText('Generate')
-        self.copyButton.setText('Copy')
+        self.btnGeneratePass.setText('Generate')
+        self.btnCopyPass.setText('Copy')
 
         # Set input properties
-        self.passwordInput.setReadOnly(True)
+        self.txtPassword.setReadOnly(True)
 
         # Add widgets to the main input layout
-        self.generatePasswordLayout.addWidget(self.generateButton)
-        self.generatePasswordLayout.addWidget(self.passwordInput)
-        self.generatePasswordLayout.addWidget(self.copyButton)
+        self.lytGeneratePass.addWidget(self.btnGeneratePass)
+        self.lytGeneratePass.addWidget(self.txtPassword)
+        self.lytGeneratePass.addWidget(self.btnCopyPass)
 
         # Set layout properties
-        # self.generatePasswordLayout.setAlignment(Qt.AlignTop)
+        # self.lytGeneratePass.setAlignment(Qt.AlignTop)
 
         # Add widgets to the general layout
-        self.generalLayout.addLayout(self.generatePasswordLayout)
+        self.lytGeneral.addLayout(self.lytGeneratePass)
 
 
 # Client
