@@ -1,5 +1,6 @@
 import sys
 
+from mypassword import Password, PasswordLevel
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QHBoxLayout
@@ -21,13 +22,15 @@ class HowlPasswordManagerController:
         self.__connectSignals()
     
     def __connectSignals(self):
-        self.__view.btnGeneratePass.clicked.connect(lambda :self.__setRandomText())
+        self.__view.btnGeneratePass.clicked.connect(lambda :self.__generatePassword())
         self.__view.btnCopyPass.clicked.connect(lambda :self.__copyPassword())
     
-    def __setRandomText(self):
+    def __generatePassword(self):
+        password = Password(length=32, level=PasswordLevel.FOUR)
+
         self.__view.lblCopyMessage.setVisible(False)
 
-        self.__view.txtPassword.setText('Hello World!')
+        self.__view.txtPassword.setText(password.password)
         self.__view.txtPassword.setFocus()
     
     def __copyPassword(self):
