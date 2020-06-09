@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QTableWidget
+from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QWidget
 
@@ -20,6 +22,7 @@ class HowlPasswordManagerController:
         self.__clipBoard = application.clipboard()
 
         self.__connectSignals()
+        self.__loadTableInfo()
     
     def __connectSignals(self):
         self.__view.btnGeneratePass.clicked.connect(lambda :self.__generatePassword())
@@ -39,7 +42,48 @@ class HowlPasswordManagerController:
 
         if not self.__view.lblCopyMessage.isVisible():
             self.__view.lblCopyMessage.setVisible(True)
+    
+    def __doubleClick(self):
+        print('double click')
+    
+    def __loadTableInfo(self):
+        rows = self.__getTableItems()
         
+        self.__view.tblPasswords.setRowCount(len(rows))
+
+        for x, row in enumerate(rows):
+            for y, item in enumerate(row):
+                self.__view.tblPasswords.setItem(x, y, item)
+
+        self.__view.tblPasswords.itemDoubleClicked.connect(lambda :self.__doubleClick())
+    
+    def __getTableItems(self):
+        tableItemService = QTableWidgetItem('Github')
+        tableItemWebsite = QTableWidgetItem('https://github.com')
+        tableItemDescription = QTableWidgetItem('My projects repo')
+        tableItemUser = QTableWidgetItem('mu_username')
+        tableItemPassword = QTableWidgetItem('T0dr24#_drof8PL!')
+        tableItemKeyName = QTableWidgetItem('red panda')
+        
+        tableItemService.setFlags(Qt.ItemIsEnabled)
+        tableItemWebsite.setFlags(Qt.ItemIsEnabled)
+        tableItemDescription.setFlags(Qt.ItemIsEnabled)
+        tableItemUser.setFlags(Qt.ItemIsEnabled)
+        tableItemPassword.setFlags(Qt.ItemIsEnabled)
+        tableItemKeyName.setFlags(Qt.ItemIsEnabled)
+
+        tableRows = []
+        tableRow = []
+        tableRow.append(tableItemService)
+        tableRow.append(tableItemWebsite)
+        tableRow.append(tableItemDescription)
+        tableRow.append(tableItemUser)
+        tableRow.append(tableItemPassword)
+        tableRow.append(tableItemKeyName)
+
+        tableRows.append(tuple(tableRow))
+        
+        return tableRows
 
 
 # Howl Password Manager GUI
@@ -65,6 +109,7 @@ class HowlPasswordManager(QMainWindow):
         # Create GUI
         self.__createHeader()
         self.__createMainInput()
+        self.__createPasswordsTable()
     
     def __createHeader(self):
         self.lytHeader = QVBoxLayout()
@@ -115,7 +160,23 @@ class HowlPasswordManager(QMainWindow):
         self.lytMainInput.addWidget(self.lblCopyMessage)
         
         self.lytGeneral.addLayout(self.lytMainInput)
+    
+    def __createPasswordsTable(self):
+        tableLabels = (
+            'Service',
+            'Website',
+            'Description',
+            'User',
+            'Password',
+            'Key name'
+        )
 
+        self.tblPasswords = QTableWidget()
+        # self.tblPasswords.setRowCount(1)
+        self.tblPasswords.setColumnCount(6)
+        self.tblPasswords.setHorizontalHeaderLabels(tableLabels)
+
+        self.lytGeneral.addWidget(self.tblPasswords)
 
 # Client
 def main():
