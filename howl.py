@@ -1,3 +1,5 @@
+import os.path
+import sqlite3
 import sys
 
 from mypassword import Password, PasswordLevel
@@ -14,12 +16,62 @@ from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QWidget
 
 
+class HowlPasswordManagerModel:
+    __instance = None
+    
+    databaseName = 'howldb.db'
+    connection = None
+    cursor = None
+
+    def __new__(cls):
+        if not HowlPasswordManagerModel.__instance:
+            HowlPasswordManagerModel.__instance = object.__new__(cls)
+        
+        return HowlPasswordManagerModel.__instance
+
+    @staticmethod
+    def getInstance():
+        if not HowlPasswordManagerModel.__instance:
+            HowlPasswordManagerModel.__instance = HowlPasswordManagerModel()
+        
+        return HowlPasswordManagerModel.__instance
+
+    @staticmethod
+    def createPasswordsTable():
+        instance = HowlPasswordManagerModel.getInstance()
+
+        instance.__openConnection()
+        instance.cursor.execute('''CREATE table passwords (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            service_name VARCHAR(100) NOT NULL,
+            website VARCHAR(200),
+            description VARCHAR(200),
+            username VARCHAR(100) NOT NULL,
+            password VARCHAR(128) NOT NULL,
+            key_name VARCHAR(100) NOT NULL
+        )''')
+        instance.__closeConnection()
+
+    @staticmethod
+    def __openConnection():
+        instance = HowlPasswordManagerModel.getInstance()
+
+        instance.connection = sqlite3.connect(instance.databaseName)
+        instance.cursor = instance.connection.cursor()
+    
+    @staticmethod
+    def __closeConnection():
+        instance = HowlPasswordManagerModel.getInstance()
+        instance.connection.close()
+
 class HowlPasswordManagerController:
     
     def __init__(self, view, application):
         self.__view = view
         self.__application = application
         self.__clipBoard = application.clipboard()
+
+        self.__createDatabaseIfNotExists()
 
         self.__connectSignals()
         self.__loadTableInfo()
@@ -84,6 +136,15 @@ class HowlPasswordManagerController:
         tableRows.append(tuple(tableRow))
         
         return tableRows
+
+    def __createDatabaseIfNotExists(self):
+        model = HowlPasswordManagerModel.getInstance()
+
+        if not os.path.exists(model.databaseName):
+            print('Create database and tables')
+            model.createPasswordsTable()
+        
+        print('Database ininitalized')
 
 
 # Howl Password Manager GUI
