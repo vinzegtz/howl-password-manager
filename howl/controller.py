@@ -52,30 +52,35 @@ class Manager:
         self.__view.tblPasswords.itemDoubleClicked.connect(lambda :self.__doubleClick())
     
     def __getTableItems(self):
-        tableItemService = QTableWidgetItem('Github')
-        tableItemWebsite = QTableWidgetItem('https://github.com')
-        tableItemDescription = QTableWidgetItem('My projects repo')
-        tableItemUser = QTableWidgetItem('mu_username')
-        tableItemPassword = QTableWidgetItem('T0dr24#_drof8PL!')
-        tableItemKeyName = QTableWidgetItem('red panda')
-        
-        tableItemService.setFlags(Qt.ItemIsEnabled)
-        tableItemWebsite.setFlags(Qt.ItemIsEnabled)
-        tableItemDescription.setFlags(Qt.ItemIsEnabled)
-        tableItemUser.setFlags(Qt.ItemIsEnabled)
-        tableItemPassword.setFlags(Qt.ItemIsEnabled)
-        tableItemKeyName.setFlags(Qt.ItemIsEnabled)
-
+        instance = DB.getInstance()
+        passwords = instance.getAllPasswords()
         tableRows = []
-        tableRow = []
-        tableRow.append(tableItemService)
-        tableRow.append(tableItemWebsite)
-        tableRow.append(tableItemDescription)
-        tableRow.append(tableItemUser)
-        tableRow.append(tableItemPassword)
-        tableRow.append(tableItemKeyName)
 
-        tableRows.append(tuple(tableRow))
+        for password in passwords:
+            tableRow = []
+
+            tableItemService = QTableWidgetItem(password[1])
+            tableItemWebsite = QTableWidgetItem(password[2])
+            tableItemDescription = QTableWidgetItem(password[3])
+            tableItemUser = QTableWidgetItem(password[4])
+            tableItemPassword = QTableWidgetItem(password[5])
+            tableItemKeyName = QTableWidgetItem(password[6])
+            
+            tableItemService.setFlags(Qt.ItemIsEnabled)
+            tableItemWebsite.setFlags(Qt.ItemIsEnabled)
+            tableItemDescription.setFlags(Qt.ItemIsEnabled)
+            tableItemUser.setFlags(Qt.ItemIsEnabled)
+            tableItemPassword.setFlags(Qt.ItemIsEnabled)
+            tableItemKeyName.setFlags(Qt.ItemIsEnabled)
+
+            tableRow.append(tableItemService)
+            tableRow.append(tableItemWebsite)
+            tableRow.append(tableItemDescription)
+            tableRow.append(tableItemUser)
+            tableRow.append(tableItemPassword)
+            tableRow.append(tableItemKeyName)
+
+            tableRows.append(tuple(tableRow))
         
         return tableRows
 

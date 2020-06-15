@@ -36,8 +36,22 @@ class DB:
             password VARCHAR(128) NOT NULL,
             key_name VARCHAR(100) NOT NULL
         )''')
+        
         instance.__closeConnection()
 
+    @staticmethod
+    def getAllPasswords():
+        instance = DB.getInstance()
+
+        instance.__openConnection()
+
+        instance.cursor.execute('SELECT * FROM passwords')
+        passwords = instance.cursor.fetchall()
+
+        instance.__closeConnection()
+
+        return passwords
+ 
     @staticmethod
     def __openConnection():
         instance = DB.getInstance()
