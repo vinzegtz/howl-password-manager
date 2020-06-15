@@ -37,8 +37,9 @@ class Manager:
         if not self.__view.lblCopyMessage.isVisible():
             self.__view.lblCopyMessage.setVisible(True)
     
-    def __doubleClick(self):
-        print('double click')
+    def __doubleClick(self, item):
+        columnName = self.__view.tblPasswords.horizontalHeaderItem(item.column()).text()
+        print(f'double click for {columnName}')
     
     def __loadTableInfo(self):
         rows = self.__getTableItems()
@@ -49,7 +50,7 @@ class Manager:
             for y, item in enumerate(row):
                 self.__view.tblPasswords.setItem(x, y, item)
 
-        self.__view.tblPasswords.itemDoubleClicked.connect(lambda :self.__doubleClick())
+        self.__view.tblPasswords.itemDoubleClicked.connect(self.__doubleClick)
     
     def __getTableItems(self):
         instance = DB.getInstance()
