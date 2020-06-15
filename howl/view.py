@@ -93,9 +93,23 @@ class WindowManager(QMainWindow):
             'Key name'
         )
 
+        self.lytPasswordsTable = QVBoxLayout()
+        self.lytPasswordsTableStatus = QHBoxLayout()
         self.tblPasswords = QTableWidget()
-        # self.tblPasswords.setRowCount(1)
+        self.lblPasswordsTableStatusTitle = QLabel()
+        self.lblPasswordsTableStatusMessage = QLabel()
+
         self.tblPasswords.setColumnCount(6)
         self.tblPasswords.setHorizontalHeaderLabels(tableLabels)
+        self.lblPasswordsTableStatusTitle.setText('Status: ')
+        self.lblPasswordsTableStatusMessage.setText('-----')
+        self.lblPasswordsTableStatusTitle.setAlignment(Qt.AlignRight)
+        self.lblPasswordsTableStatusMessage.setAlignment(Qt.AlignRight)
+        self.lytPasswordsTableStatus.setStretch(0, 0)
+        self.lytPasswordsTableStatus.setStretch(0, 0)
 
-        self.lytGeneral.addWidget(self.tblPasswords)
+        self.lytPasswordsTableStatus.addWidget(self.lblPasswordsTableStatusTitle)
+        self.lytPasswordsTableStatus.addWidget(self.lblPasswordsTableStatusMessage)
+        self.lytPasswordsTable.addWidget(self.tblPasswords)
+        self.lytPasswordsTable.addLayout(self.lytPasswordsTableStatus)
+        self.lytGeneral.addLayout(self.lytPasswordsTable)
