@@ -1,6 +1,7 @@
 from mypassword import Password, PasswordLevel
 from os import path
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QTableWidgetItem
 
 from .model import DB
@@ -21,6 +22,8 @@ class Manager:
     def __connectSignals(self):
         self.__view.btnGeneratePass.clicked.connect(lambda :self.__generatePassword())
         self.__view.btnCopyPass.clicked.connect(lambda :self.__copyPassword())
+
+        self.__view.menuItemHelp.triggered[QAction].connect(self.__click)
     
     def __generatePassword(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
@@ -41,6 +44,9 @@ class Manager:
         columnName = self.__view.tblPasswords.horizontalHeaderItem(item.column()).text()
         print(f'double click for {columnName}')
     
+    def __click(self, action):
+        print(f'Trigger for {action.text()}')
+
     def __loadTableInfo(self):
         rows = self.__getTableItems()
         

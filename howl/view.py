@@ -1,4 +1,5 @@
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
@@ -32,6 +33,7 @@ class WindowManager(QMainWindow):
         self.__createHeader()
         self.__createMainInput()
         self.__createPasswordsTable()
+        self.__createMenuBar()
     
     def __createHeader(self):
         self.lytHeader = QVBoxLayout()
@@ -113,3 +115,17 @@ class WindowManager(QMainWindow):
         self.lytPasswordsTable.addWidget(self.tblPasswords)
         self.lytPasswordsTable.addLayout(self.lytPasswordsTableStatus)
         self.lytGeneral.addLayout(self.lytPasswordsTable)
+    
+    def __createMenuBar(self):
+        menuBar = self.menuBar()
+        
+        self.menuItemFile = menuBar.addMenu('File')
+        self.menuItemFile.addAction('New password')
+
+        self.menuItemEdit = menuBar.addMenu('Edit')
+        self.menuItemEdit.addAction('Change DB path')
+
+        self.menuItemHelp = menuBar.addMenu('Help')
+        aboutAction = QAction('About', self)
+        aboutAction.setShortcut('Ctrl+R')
+        self.menuItemHelp.addAction(aboutAction)
