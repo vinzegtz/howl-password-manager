@@ -94,7 +94,7 @@ class Manager:
     def __createDatabaseIfNotExists(self):
         model = DB.getInstance()
 
-        if not path.exists(model.databaseName):
+        if not path.exists(model.databasePath):
             print('Create database and tables')
             model.createPasswordsTable()
         

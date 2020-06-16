@@ -1,11 +1,17 @@
 import sqlite3
+from os import path
 
 
 # Class to manage the connections and the operations to the database
 class DB:
     __instance = None
     
+    databaseConfigFolder = 'database'
     databaseName = 'howldb.db'
+    
+    packagePath = path.abspath(path.dirname('app.py'))
+    databasePath = path.join(packagePath, f'{databaseConfigFolder}/{databaseName}')
+    
     connection = None
     cursor = None
 
@@ -55,8 +61,8 @@ class DB:
     @staticmethod
     def __openConnection():
         instance = DB.getInstance()
-
-        instance.connection = sqlite3.connect(instance.databaseName)
+        print(instance.databasePath)
+        instance.connection = sqlite3.connect(instance.databasePath)
         instance.cursor = instance.connection.cursor()
     
     @staticmethod
