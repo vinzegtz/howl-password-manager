@@ -23,6 +23,8 @@ class Manager:
         self.__view.btnGeneratePass.clicked.connect(lambda :self.__generatePassword())
         self.__view.btnCopyPass.clicked.connect(lambda :self.__copyPassword())
 
+        self.__view.menuItemFile.triggered[QAction].connect(self.__clickFileActions)
+        self.__view.menuItemEdit.triggered[QAction].connect(self.__click)
         self.__view.menuItemHelp.triggered[QAction].connect(self.__click)
     
     def __generatePassword(self):
@@ -46,6 +48,10 @@ class Manager:
     
     def __click(self, action):
         print(f'Trigger for {action.text()}')
+
+    def __clickFileActions(self, action):
+        if action.text() == 'New password':
+            self.__view.windowPasswordForm.show()
 
     def __loadTableInfo(self):
         rows = self.__getTableItems()

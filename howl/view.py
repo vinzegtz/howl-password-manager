@@ -29,6 +29,9 @@ class WindowManager(QMainWindow):
         self.wgtCentral.setLayout(self.lytGeneral)
         self.setCentralWidget(self.wgtCentral)
 
+        # Other windows
+        self.windowPasswordForm = WindowPasswordForm(self)
+
         # Create GUI
         self.__createHeader()
         self.__createMainInput()
@@ -120,12 +123,75 @@ class WindowManager(QMainWindow):
         menuBar = self.menuBar()
         
         self.menuItemFile = menuBar.addMenu('File')
-        self.menuItemFile.addAction('New password')
+        self.menuItemActionNewPassword = QAction('New password', self)
+        self.menuItemActionNewPassword.setShortcut('Ctrl+N')
+        self.menuItemFile.addAction(self.menuItemActionNewPassword)
 
         self.menuItemEdit = menuBar.addMenu('Edit')
         self.menuItemEdit.addAction('Change DB path')
 
         self.menuItemHelp = menuBar.addMenu('Help')
-        aboutAction = QAction('About', self)
-        aboutAction.setShortcut('Ctrl+R')
-        self.menuItemHelp.addAction(aboutAction)
+        self.menuItemActionAbout = QAction('About', self)
+        self.menuItemActionAbout.setShortcut('Ctrl+R')
+        self.menuItemHelp.addAction(self.menuItemActionAbout)
+
+
+class WindowPasswordForm(QMainWindow):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.setWindowTitle('Password Management')
+        self.setFixedSize(400, 360)
+        
+        self.lytGeneral = QVBoxLayout()
+        self.wgtCentral = QWidget(self)
+
+        self.wgtCentral.setLayout(self.lytGeneral)
+        self.setCentralWidget(self.wgtCentral)
+
+        # Create GUI
+        self.__createForm()
+    
+    def __createForm(self):
+        self.lytForm = QVBoxLayout()
+
+        self.lblService = QLabel()
+        self.lblWebsite = QLabel()
+        self.lblDescription = QLabel()
+        self.lblUser = QLabel()
+        self.lblPassword = QLabel()
+        self.lblKeyname = QLabel()
+
+        self.txtService = QLineEdit()
+        self.txtWebsite = QLineEdit()
+        self.txtDescription = QLineEdit()
+        self.txtUser = QLineEdit()
+        self.txtPassword = QLineEdit()
+        self.txtKeyname = QLineEdit()
+
+        self.btnSave = QPushButton()
+
+        self.lblService.setText('Service')
+        self.lblWebsite.setText('Website')
+        self.lblDescription.setText('Description')
+        self.lblUser.setText('User')
+        self.lblPassword.setText('Password')
+        self.lblKeyname.setText('Keyname')
+        self.btnSave.setText('Save')
+
+        self.lytForm.addWidget(self.lblService)
+        self.lytForm.addWidget(self.txtService)
+        self.lytForm.addWidget(self.lblWebsite)
+        self.lytForm.addWidget(self.txtWebsite)
+        self.lytForm.addWidget(self.lblDescription)
+        self.lytForm.addWidget(self.txtDescription)
+        self.lytForm.addWidget(self.lblUser)
+        self.lytForm.addWidget(self.txtUser)
+        self.lytForm.addWidget(self.lblPassword)
+        self.lytForm.addWidget(self.txtPassword)
+        self.lytForm.addWidget(self.lblKeyname)
+        self.lytForm.addWidget(self.txtKeyname)
+        self.lytForm.addWidget(self.btnSave)
+
+        self.lytGeneral.addLayout(self.lytForm)
