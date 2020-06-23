@@ -12,8 +12,6 @@ from PyQt5.QtWidgets import QWidget
 
 # Class to create the main window interface
 class WindowManager(QMainWindow):
-    wgtCentral = None
-
     def __init__(self):
         super().__init__()
 
@@ -137,7 +135,6 @@ class WindowManager(QMainWindow):
 
 
 class WindowPasswordForm(QMainWindow):
-
     def __init__(self, parent=None):
         super().__init__(parent)
 
