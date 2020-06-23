@@ -195,3 +195,13 @@ class WindowPasswordForm(QMainWindow):
         self.lytForm.addWidget(self.btnSave)
 
         self.lytGeneral.addLayout(self.lytForm)
+    
+    def cleanForm(self):
+        self.txtService.setText('')
+        self.txtWebsite.setText('')
+        self.txtDescription.setText('')
+        self.txtUser.setText('')
+        self.txtPassword.setText('')
+        self.txtKeyname.setText('')
+        
+        self.txtService.setFocus()

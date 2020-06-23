@@ -51,6 +51,7 @@ class Manager:
 
     def __clickFileActions(self, action):
         if action.text() == 'New password':
+            self.__view.windowPasswordForm.cleanForm()
             self.__view.windowPasswordForm.show()
 
     def __loadTableInfo(self):
