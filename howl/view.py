@@ -170,6 +170,7 @@ class WindowPasswordForm(QMainWindow):
         self.txtPassword = QLineEdit()
         self.txtKeyname = QLineEdit()
 
+        self.btnGeneratePassword = QPushButton()
         self.btnSave = QPushButton()
 
         self.lblService.setText('Service')
@@ -178,6 +179,7 @@ class WindowPasswordForm(QMainWindow):
         self.lblUser.setText('User')
         self.lblPassword.setText('Password')
         self.lblKeyname.setText('Keyname')
+        # self.btnGeneratePassword.setText('Generate pass')
         self.btnSave.setText('Save')
 
         self.lytForm.addWidget(self.lblService)
@@ -192,6 +194,7 @@ class WindowPasswordForm(QMainWindow):
         self.lytForm.addWidget(self.txtPassword)
         self.lytForm.addWidget(self.lblKeyname)
         self.lytForm.addWidget(self.txtKeyname)
+        # self.lytForm.addWidget(self.btnGeneratePassword)
         self.lytForm.addWidget(self.btnSave)
 
         self.lytGeneral.addLayout(self.lytForm)
