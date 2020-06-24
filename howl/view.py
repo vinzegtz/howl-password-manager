@@ -1,6 +1,5 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAction
-# from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
@@ -128,9 +127,9 @@ class WindowManager(QMainWindow):
 
         self.menuItemEdit = menuBar.addMenu('Edit')
         self.menuItemEdit.addAction('Change DB path')
-        # self.menuItemActionEditPassword = QAction('Edit password', self)
-        # self.menuItemActionEditPassword.setShortcut('Ctrl+E')
-        # self.menuItemEdit.addAction(self.menuItemActionEditPassword)
+        self.menuItemActionEditPassword = QAction('Edit password', self)
+        self.menuItemActionEditPassword.setShortcut('Ctrl+E')
+        self.menuItemEdit.addAction(self.menuItemActionEditPassword)
 
         self.menuItemHelp = menuBar.addMenu('Help')
         self.menuItemActionAbout = QAction('About', self)

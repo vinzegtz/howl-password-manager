@@ -4,17 +4,13 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QTableWidgetItem
 
-# from PyQt5.QtWidgets import QTableWidgetSelectionRange
-# from PyQt5.QtWidgets import QMenu
-# from PyQt5 import QtCore
-
 from .model import DB
 
 
 # Class to manage the logic and flow of the main window
 class Manager:
     def __init__(self, view, application):
-        # self.selectedCell = None
+        self.selectedCell = None
 
         self.__view = view
         self.__application = application
@@ -32,7 +28,7 @@ class Manager:
 
         # Menu
         self.__view.menuItemFile.triggered[QAction].connect(self.__clickFileActions)
-        self.__view.menuItemEdit.triggered[QAction].connect(self.__click)
+        self.__view.menuItemEdit.triggered[QAction].connect(self.__clickEditActions)
         self.__view.menuItemHelp.triggered[QAction].connect(self.__click)
 
         # Form
@@ -56,11 +52,12 @@ class Manager:
     def __doubleClick(self, item):
         columnName = self.__view.tblPasswords.horizontalHeaderItem(item.column()).text()
         print(f'double click for {columnName}')
-        # self.selectedCell = (item.column(), item.row())
 
     def __click(self, action):
         print(f'Trigger for {action.text()}')
-        # print(self.selectedCell)
+
+    def __setSelectedCell(self, item):
+        self.selectedCell = (item.column(), item.row())
 
     def __clickFileActions(self, action):
         if action.text() == 'New password':
@@ -69,6 +66,10 @@ class Manager:
             self.__view.windowPasswordForm.cleanForm()
             self.__view.windowPasswordForm.txtPassword.setText(password.password)
             self.__view.windowPasswordForm.show()
+
+    def __clickEditActions(self, action):
+        if action.text() == 'Edit password':
+            print(self.selectedCell)
 
     def __loadTableInfo(self):
         rows = self.__getTableItems()
@@ -80,10 +81,8 @@ class Manager:
                 self.__view.tblPasswords.setItem(x, y, item)
 
         self.__view.tblPasswords.itemDoubleClicked.connect(self.__doubleClick)
+        self.__view.tblPasswords.itemClicked.connect(self.__setSelectedCell)
         
-        # self.__view.tblPasswords.setContextMenuPolicy(Qt.CustomContextMenu)
-        # self.__view.tblPasswords.customContextMenuRequested.connect(self.on_customContextMenuRequested)
-
     def __getTableItems(self):
         instance = DB.getInstance()
         passwords = instance.getAllPasswords()
@@ -142,19 +141,3 @@ class Manager:
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__view.windowPasswordForm.close()
-
-    #def on_customContextMenuRequested(self, pos):
-    #    item = self.__view.tblPasswords.itemAt(pos)
-    #    cell = self.__view.tblPasswords.item(item.row(), self.__view.tblPasswords.columnCount() - 1)
-        
-    #    menuContext = QMenu()
-    #    menuContext.addAction('Edit')
-    #    menuContext.addAction('Delete')
-
-    #    demoAction = QAction('Demo', self.__view.tblPasswords)
-    #    demoAction.setShortcut('Ctrl+K')
-    #    menuContext.addAction(demoAction)
-
-    #    # actionSelected = menuContext.exec(self.__view.mapToGlobal(pos))
-    #    actionSelected = menuContext.exec(self.__view.tblPasswords.viewport().mapToGlobal(pos))
-    #    print(actionSelected)
