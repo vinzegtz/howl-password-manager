@@ -20,12 +20,18 @@ class Manager:
         self.__loadTableInfo()
     
     def __connectSignals(self):
+        # Main window
         self.__view.btnGeneratePass.clicked.connect(lambda :self.__generatePassword())
         self.__view.btnCopyPass.clicked.connect(lambda :self.__copyPassword())
 
+        # Menu
         self.__view.menuItemFile.triggered[QAction].connect(self.__clickFileActions)
         self.__view.menuItemEdit.triggered[QAction].connect(self.__click)
         self.__view.menuItemHelp.triggered[QAction].connect(self.__click)
+
+        # Form
+        self.__view.windowPasswordForm.btnSave.clicked.connect(self.__savePassword)
+
     
     def __generatePassword(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
@@ -109,3 +115,20 @@ class Manager:
             model.createPasswordsTable()
         
         print('Database ininitalized')
+    
+    def __savePassword(self):
+        password = (
+            self.__view.windowPasswordForm.txtService.text(),
+            self.__view.windowPasswordForm.txtWebsite.text(),
+            self.__view.windowPasswordForm.txtDescription.text(),
+            self.__view.windowPasswordForm.txtUser.text(),
+            self.__view.windowPasswordForm.txtPassword.text(),
+            self.__view.windowPasswordForm.txtKeyname.text(),
+        )
+
+        model = DB.getInstance()
+        model.savePassword(password)
+
+        self.__view.tblPasswords.clear()
+        self.__loadTableInfo()
+        self.__view.windowPasswordForm.close()

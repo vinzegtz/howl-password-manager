@@ -59,6 +59,16 @@ class DB:
         return passwords
  
     @staticmethod
+    def savePassword(password):
+        instance = DB.getInstance()
+        instance.__openConnection()
+
+        instance.cursor.execute('INSERT INTO passwords(service_name, website, description, username, password, key_name) VALUES (?, ?, ?, ?, ?, ?)', password)
+        instance.connection.commit()
+
+        instance.__closeConnection()
+
+    @staticmethod
     def __openConnection():
         instance = DB.getInstance()
         print(instance.databasePath)
