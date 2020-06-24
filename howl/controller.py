@@ -4,12 +4,18 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QTableWidgetItem
 
+# from PyQt5.QtWidgets import QTableWidgetSelectionRange
+# from PyQt5.QtWidgets import QMenu
+# from PyQt5 import QtCore
+
 from .model import DB
 
 
 # Class to manage the logic and flow of the main window
 class Manager:
     def __init__(self, view, application):
+        # self.selectedCell = None
+
         self.__view = view
         self.__application = application
         self.__clipBoard = application.clipboard()
@@ -32,7 +38,6 @@ class Manager:
         # Form
         self.__view.windowPasswordForm.btnSave.clicked.connect(self.__savePassword)
 
-    
     def __generatePassword(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
 
@@ -40,20 +45,22 @@ class Manager:
 
         self.__view.txtPassword.setText(password.password)
         self.__view.txtPassword.setFocus()
-    
+
     def __copyPassword(self):
         password = self.__view.txtPassword.text()
         self.__clipBoard.setText(password)
 
         if not self.__view.lblCopyMessage.isVisible():
             self.__view.lblCopyMessage.setVisible(True)
-    
+
     def __doubleClick(self, item):
         columnName = self.__view.tblPasswords.horizontalHeaderItem(item.column()).text()
         print(f'double click for {columnName}')
-    
+        # self.selectedCell = (item.column(), item.row())
+
     def __click(self, action):
         print(f'Trigger for {action.text()}')
+        # print(self.selectedCell)
 
     def __clickFileActions(self, action):
         if action.text() == 'New password':
@@ -73,7 +80,10 @@ class Manager:
                 self.__view.tblPasswords.setItem(x, y, item)
 
         self.__view.tblPasswords.itemDoubleClicked.connect(self.__doubleClick)
-    
+        
+        # self.__view.tblPasswords.setContextMenuPolicy(Qt.CustomContextMenu)
+        # self.__view.tblPasswords.customContextMenuRequested.connect(self.on_customContextMenuRequested)
+
     def __getTableItems(self):
         instance = DB.getInstance()
         passwords = instance.getAllPasswords()
@@ -115,7 +125,7 @@ class Manager:
             model.createPasswordsTable()
         
         print('Database ininitalized')
-    
+
     def __savePassword(self):
         password = (
             self.__view.windowPasswordForm.txtService.text(),
@@ -132,3 +142,19 @@ class Manager:
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__view.windowPasswordForm.close()
+
+    #def on_customContextMenuRequested(self, pos):
+    #    item = self.__view.tblPasswords.itemAt(pos)
+    #    cell = self.__view.tblPasswords.item(item.row(), self.__view.tblPasswords.columnCount() - 1)
+        
+    #    menuContext = QMenu()
+    #    menuContext.addAction('Edit')
+    #    menuContext.addAction('Delete')
+
+    #    demoAction = QAction('Demo', self.__view.tblPasswords)
+    #    demoAction.setShortcut('Ctrl+K')
+    #    menuContext.addAction(demoAction)
+
+    #    # actionSelected = menuContext.exec(self.__view.mapToGlobal(pos))
+    #    actionSelected = menuContext.exec(self.__view.tblPasswords.viewport().mapToGlobal(pos))
+    #    print(actionSelected)

@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAction
+# from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
@@ -35,7 +36,7 @@ class WindowManager(QMainWindow):
         self.__createMainInput()
         self.__createPasswordsTable()
         self.__createMenuBar()
-    
+
     def __createHeader(self):
         self.lytHeader = QVBoxLayout()
         self.lblMainTitle = QLabel()
@@ -85,7 +86,7 @@ class WindowManager(QMainWindow):
         self.lytMainInput.addWidget(self.lblCopyMessage)
         
         self.lytGeneral.addLayout(self.lytMainInput)
-    
+
     def __createPasswordsTable(self):
         tableLabels = (
             'Service',
@@ -116,7 +117,7 @@ class WindowManager(QMainWindow):
         self.lytPasswordsTable.addWidget(self.tblPasswords)
         self.lytPasswordsTable.addLayout(self.lytPasswordsTableStatus)
         self.lytGeneral.addLayout(self.lytPasswordsTable)
-    
+
     def __createMenuBar(self):
         menuBar = self.menuBar()
         
@@ -127,6 +128,9 @@ class WindowManager(QMainWindow):
 
         self.menuItemEdit = menuBar.addMenu('Edit')
         self.menuItemEdit.addAction('Change DB path')
+        # self.menuItemActionEditPassword = QAction('Edit password', self)
+        # self.menuItemActionEditPassword.setShortcut('Ctrl+E')
+        # self.menuItemEdit.addAction(self.menuItemActionEditPassword)
 
         self.menuItemHelp = menuBar.addMenu('Help')
         self.menuItemActionAbout = QAction('About', self)
