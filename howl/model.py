@@ -76,6 +76,16 @@ class DB:
         instance.connection.commit()
 
         instance.__closeConnection()
+    
+    @staticmethod
+    def deletePasswordByKeyName(keyName):
+        instance = DB.getInstance()
+        instance.__openConnection()
+
+        instance.cursor.execute(f'DELETE FROM passwords WHERE key_name = "{keyName}"')
+        instance.connection.commit()
+
+        instance.__closeConnection()
 
     @staticmethod
     def getPasswordByKeyName(keyName):

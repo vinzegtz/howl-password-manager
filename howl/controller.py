@@ -80,6 +80,10 @@ class Manager:
             self.__view.windowPasswordForm.btnUpdate.show()
             self.__view.windowPasswordForm.btnSave.hide()
             self.__view.windowPasswordForm.show()
+        elif action.text() == 'Delete password' and self.selectedCell != None:
+            model = DB.getInstance()
+            keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
+            self.__deletePassword(keyName)
 
     def __loadTableInfo(self):
         rows = self.__getTableItems()
@@ -169,3 +173,10 @@ class Manager:
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__view.windowPasswordForm.close()
+    
+    def __deletePassword(self, keyName):
+        model = DB.getInstance()
+        model.deletePasswordByKeyName(keyName)
+
+        self.__view.tblPasswords.clear()
+        self.__loadTableInfo()

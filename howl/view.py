@@ -130,6 +130,9 @@ class WindowManager(QMainWindow):
         self.menuItemActionEditPassword = QAction('Edit password', self)
         self.menuItemActionEditPassword.setShortcut('Ctrl+E')
         self.menuItemEdit.addAction(self.menuItemActionEditPassword)
+        self.menuItemActionDeletePassword = QAction('Delete password', self)
+        self.menuItemActionDeletePassword.setShortcut('Ctrl+D')
+        self.menuItemEdit.addAction(self.menuItemActionDeletePassword)
 
         self.menuItemHelp = menuBar.addMenu('Help')
         self.menuItemActionAbout = QAction('About', self)
