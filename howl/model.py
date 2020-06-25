@@ -72,7 +72,7 @@ class DB:
         instance = DB.getInstance()
         instance.__openConnection()
 
-        instance.cursor.execute('UPDATE passwords SET service_name = ?, website = ?, description = ?, username = ?, password = ?, key_name = ? WHERE key_name = ?', password)
+        instance.cursor.execute('UPDATE passwords SET service_name = ?, website = ?, description = ?, username = ?, password = ? WHERE key_name = ?', password)
         instance.connection.commit()
 
         instance.__closeConnection()

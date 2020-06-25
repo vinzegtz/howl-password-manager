@@ -163,8 +163,7 @@ class Manager:
             self.__view.windowPasswordForm.txtDescription.text(),
             self.__view.windowPasswordForm.txtUser.text(),
             self.__view.windowPasswordForm.txtPassword.text(),
-            self.__view.windowPasswordForm.txtKeyname.text(),
-            self.__view.windowPasswordForm.txtKeyname.text(), # Where condition
+            self.__view.windowPasswordForm.txtKeyname.text()
         )
 
         model = DB.getInstance()
