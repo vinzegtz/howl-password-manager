@@ -33,6 +33,7 @@ class Manager:
 
         # Form
         self.__view.windowPasswordForm.btnSave.clicked.connect(self.__savePassword)
+        self.__view.windowPasswordForm.btnUpdate.clicked.connect(self.__updatePassword)
 
     def __generatePassword(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
@@ -57,7 +58,7 @@ class Manager:
         print(f'Trigger for {action.text()}')
 
     def __setSelectedCell(self, item):
-        self.selectedCell = (item.column(), item.row())
+        self.selectedCell = (item.row(), item.column())
 
     def __clickFileActions(self, action):
         if action.text() == 'New password':
@@ -65,11 +66,20 @@ class Manager:
 
             self.__view.windowPasswordForm.cleanForm()
             self.__view.windowPasswordForm.txtPassword.setText(password.password)
+            self.__view.windowPasswordForm.btnUpdate.hide()
+            self.__view.windowPasswordForm.btnSave.show()
             self.__view.windowPasswordForm.show()
 
     def __clickEditActions(self, action):
-        if action.text() == 'Edit password':
-            print(self.selectedCell)
+        if action.text() == 'Edit password' and self.selectedCell != None:
+            model = DB.getInstance()
+            keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
+
+            password = model.getPasswordByKeyName(keyName)
+            self.__view.windowPasswordForm.fillForm(password)
+            self.__view.windowPasswordForm.btnUpdate.show()
+            self.__view.windowPasswordForm.btnSave.hide()
+            self.__view.windowPasswordForm.show()
 
     def __loadTableInfo(self):
         rows = self.__getTableItems()
@@ -84,8 +94,8 @@ class Manager:
         self.__view.tblPasswords.itemClicked.connect(self.__setSelectedCell)
         
     def __getTableItems(self):
-        instance = DB.getInstance()
-        passwords = instance.getAllPasswords()
+        model = DB.getInstance()
+        passwords = model.getAllPasswords()
         tableRows = []
 
         for password in passwords:
@@ -137,6 +147,24 @@ class Manager:
 
         model = DB.getInstance()
         model.savePassword(password)
+
+        self.__view.tblPasswords.clear()
+        self.__loadTableInfo()
+        self.__view.windowPasswordForm.close()
+    
+    def __updatePassword(self):
+        password = (
+            self.__view.windowPasswordForm.txtService.text(),
+            self.__view.windowPasswordForm.txtWebsite.text(),
+            self.__view.windowPasswordForm.txtDescription.text(),
+            self.__view.windowPasswordForm.txtUser.text(),
+            self.__view.windowPasswordForm.txtPassword.text(),
+            self.__view.windowPasswordForm.txtKeyname.text(),
+            self.__view.windowPasswordForm.txtKeyname.text(), # Where condition
+        )
+
+        model = DB.getInstance()
+        model.updatePassword(password)
 
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()

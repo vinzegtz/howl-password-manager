@@ -48,7 +48,6 @@ class DB:
     @staticmethod
     def getAllPasswords():
         instance = DB.getInstance()
-
         instance.__openConnection()
 
         instance.cursor.execute('SELECT * FROM passwords')
@@ -67,6 +66,28 @@ class DB:
         instance.connection.commit()
 
         instance.__closeConnection()
+    
+    @staticmethod
+    def updatePassword(password):
+        instance = DB.getInstance()
+        instance.__openConnection()
+
+        instance.cursor.execute('UPDATE passwords SET service_name = ?, website = ?, description = ?, username = ?, password = ?, key_name = ? WHERE key_name = ?', password)
+        instance.connection.commit()
+
+        instance.__closeConnection()
+
+    @staticmethod
+    def getPasswordByKeyName(keyName):
+        instance = DB.getInstance()
+        instance.__openConnection()
+
+        instance.cursor.execute(f'SELECT * FROM passwords WHERE key_name = "{keyName}"')
+        password = instance.cursor.fetchone()
+
+        instance.__closeConnection()
+
+        return password
 
     @staticmethod
     def __openConnection():
