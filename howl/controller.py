@@ -58,23 +58,33 @@ class Manager:
 
     def __clickFileActions(self, action):
         if action.text() == 'New password':
-            password = Password(length=32, level=PasswordLevel.FOUR)
+            self.__newPasswordAction()
+    
+    def __newPasswordAction(self):
+        password = Password(length=32, level=PasswordLevel.FOUR)
 
-            self.__view.windowPasswordForm.cleanForm()
-            self.__view.windowPasswordForm.txtPassword.setText(password.password)
-            self.__view.windowPasswordForm.showForCreate()
+        self.__view.windowPasswordForm.cleanForm()
+        self.__view.windowPasswordForm.txtPassword.setText(password.password)
+        self.__view.windowPasswordForm.showForCreate()
 
     def __clickEditActions(self, action):
-        if action.text() == 'Edit password' and self.selectedCell != None:
-            keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
-            password = self.passwordModel.getPasswordByKeyName(keyName)
+        if self.selectedCell != None:
+            if action.text() == 'Edit password':
+                self.__editPasswordAction()
+            elif action.text() == 'Delete password':
+                self.__deletePasswordAction()
+
+    def __editPasswordAction(self):
+        keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
+        password = self.passwordModel.getPasswordByKeyName(keyName)
+        
+        self.__view.windowPasswordForm.fillForm(password)
+        self.__view.windowPasswordForm.showForUpdate()
+
+    def __deletePasswordAction(self):
+        keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
             
-            self.__view.windowPasswordForm.fillForm(password)
-            self.__view.windowPasswordForm.showForUpdate()
-        elif action.text() == 'Delete password' and self.selectedCell != None:
-            keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
-            
-            self.__deletePasswordInDB(keyName)
+        self.__deletePasswordInDB(keyName)
 
     '''
     Password form logic
