@@ -4,13 +4,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QTableWidgetItem
 
-from .model import DB
+from .models.password import PasswordModel
 
 
 # Class to manage the logic and flow of the main window
 class Manager:
     def __init__(self, view, application):
         self.selectedCell = None
+        self.passwordModel = PasswordModel()
 
         self.__view = view
         self.__application = application
@@ -72,17 +73,16 @@ class Manager:
 
     def __clickEditActions(self, action):
         if action.text() == 'Edit password' and self.selectedCell != None:
-            model = DB.getInstance()
             keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
-
-            password = model.getPasswordByKeyName(keyName)
+            password = self.passwordModel.getPasswordByKeyName(keyName)
+            
             self.__view.windowPasswordForm.fillForm(password)
             self.__view.windowPasswordForm.btnUpdate.show()
             self.__view.windowPasswordForm.btnSave.hide()
             self.__view.windowPasswordForm.show()
         elif action.text() == 'Delete password' and self.selectedCell != None:
-            model = DB.getInstance()
             keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
+            
             self.__deletePassword(keyName)
 
     def __loadTableInfo(self):
@@ -98,8 +98,7 @@ class Manager:
         self.__view.tblPasswords.itemClicked.connect(self.__setSelectedCell)
         
     def __getTableItems(self):
-        model = DB.getInstance()
-        passwords = model.getAllPasswords()
+        passwords = self.passwordModel.getAll()
         tableRows = []
 
         for password in passwords:
@@ -131,11 +130,9 @@ class Manager:
         return tableRows
 
     def __createDatabaseIfNotExists(self):
-        model = DB.getInstance()
-
-        if not path.exists(model.databasePath):
+        if not path.exists(self.passwordModel.databasePath):
             print('Create database and tables')
-            model.createPasswordsTable()
+            self.passwordModel.createTable()
         
         print('Database ininitalized')
 
@@ -149,33 +146,30 @@ class Manager:
             self.__view.windowPasswordForm.txtKeyname.text(),
         )
 
-        model = DB.getInstance()
-        model.savePassword(password)
+        self.passwordModel.createOne(password)
 
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__view.windowPasswordForm.close()
     
     def __updatePassword(self):
+        keyName = self.__view.windowPasswordForm.txtKeyname.text()
         password = (
             self.__view.windowPasswordForm.txtService.text(),
             self.__view.windowPasswordForm.txtWebsite.text(),
             self.__view.windowPasswordForm.txtDescription.text(),
             self.__view.windowPasswordForm.txtUser.text(),
-            self.__view.windowPasswordForm.txtPassword.text(),
-            self.__view.windowPasswordForm.txtKeyname.text()
+            self.__view.windowPasswordForm.txtPassword.text()
         )
 
-        model = DB.getInstance()
-        model.updatePassword(password)
+        self.passwordModel.updateOneByKeyName(password, keyName)
 
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__view.windowPasswordForm.close()
     
     def __deletePassword(self, keyName):
-        model = DB.getInstance()
-        model.deletePasswordByKeyName(keyName)
+        self.passwordModel.deletePasswordByKeyName(keyName)
 
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
