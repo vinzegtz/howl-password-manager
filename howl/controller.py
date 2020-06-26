@@ -9,6 +9,7 @@ from .models.password import PasswordModel
 
 # Class to manage the logic and flow of the main window
 class Manager:
+
     def __init__(self, view, application):
         self.selectedCell = None
         self.passwordModel = PasswordModel()
@@ -21,45 +22,39 @@ class Manager:
 
         self.__connectSignals()
         self.__loadTableInfo()
-    
+
+    '''
+    Main window logic
+    '''
     def __connectSignals(self):
         # Main window
-        self.__view.btnGeneratePass.clicked.connect(lambda :self.__generatePassword())
-        self.__view.btnCopyPass.clicked.connect(lambda :self.__copyPassword())
+        self.__view.btnGeneratePass.clicked.connect(lambda :self.__setRandomPassword())
+        self.__view.btnCopyPass.clicked.connect(lambda :self.__copyPasswordToClipboard())
 
-        # Menu
-        self.__view.menuItemFile.triggered[QAction].connect(self.__clickFileActions)
-        self.__view.menuItemEdit.triggered[QAction].connect(self.__clickEditActions)
-        self.__view.menuItemHelp.triggered[QAction].connect(self.__click)
-
-        # Form
-        self.__view.windowPasswordForm.btnSave.clicked.connect(self.__savePassword)
-        self.__view.windowPasswordForm.btnUpdate.clicked.connect(self.__updatePassword)
-
-    def __generatePassword(self):
+        self.__connectSignalsToolBar()
+        self.__connectSignalsPasswordForm()
+ 
+    def __setRandomPassword(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
 
         self.__view.lblCopyMessage.setVisible(False)
-
         self.__view.txtPassword.setText(password.password)
         self.__view.txtPassword.setFocus()
 
-    def __copyPassword(self):
+    def __copyPasswordToClipboard(self):
         password = self.__view.txtPassword.text()
         self.__clipBoard.setText(password)
 
         if not self.__view.lblCopyMessage.isVisible():
             self.__view.lblCopyMessage.setVisible(True)
 
-    def __doubleClick(self, item):
-        columnName = self.__view.tblPasswords.horizontalHeaderItem(item.column()).text()
-        print(f'double click for {columnName}')
-
-    def __click(self, action):
-        print(f'Trigger for {action.text()}')
-
-    def __setSelectedCell(self, item):
-        self.selectedCell = (item.row(), item.column())
+    '''
+    Toolbar logic
+    '''
+    def __connectSignalsToolBar(self):
+        self.__view.menuItemFile.triggered[QAction].connect(self.__clickFileActions)
+        self.__view.menuItemEdit.triggered[QAction].connect(self.__clickEditActions)
+        self.__view.menuItemHelp.triggered[QAction].connect(lambda : print('click'))
 
     def __clickFileActions(self, action):
         if action.text() == 'New password':
@@ -83,7 +78,62 @@ class Manager:
         elif action.text() == 'Delete password' and self.selectedCell != None:
             keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
             
-            self.__deletePassword(keyName)
+            self.__deletePasswordInDB(keyName)
+
+    '''
+    Password form logic
+    '''
+    def __connectSignalsPasswordForm(self):
+        self.__view.windowPasswordForm.btnSave.clicked.connect(self.__createPasswordInDB)
+        self.__view.windowPasswordForm.btnUpdate.clicked.connect(self.__updatePasswordInDB)
+
+    def __createPasswordInDB(self):
+        password = (
+            self.__view.windowPasswordForm.txtService.text(),
+            self.__view.windowPasswordForm.txtWebsite.text(),
+            self.__view.windowPasswordForm.txtDescription.text(),
+            self.__view.windowPasswordForm.txtUser.text(),
+            self.__view.windowPasswordForm.txtPassword.text(),
+            self.__view.windowPasswordForm.txtKeyname.text(),
+        )
+
+        self.passwordModel.createOne(password)
+
+        self.__view.tblPasswords.clear()
+        self.__loadTableInfo()
+        self.__view.windowPasswordForm.close()
+
+    def __updatePasswordInDB(self):
+        keyName = self.__view.windowPasswordForm.txtKeyname.text()
+        password = (
+            self.__view.windowPasswordForm.txtService.text(),
+            self.__view.windowPasswordForm.txtWebsite.text(),
+            self.__view.windowPasswordForm.txtDescription.text(),
+            self.__view.windowPasswordForm.txtUser.text(),
+            self.__view.windowPasswordForm.txtPassword.text()
+        )
+
+        self.passwordModel.updateOneByKeyName(password, keyName)
+
+        self.__view.tblPasswords.clear()
+        self.__loadTableInfo()
+        self.__view.windowPasswordForm.close()
+
+    def __deletePasswordInDB(self, keyName):
+        self.passwordModel.deletePasswordByKeyName(keyName)
+
+        self.__view.tblPasswords.clear()
+        self.__loadTableInfo()
+
+    '''
+    Table logic
+    '''
+    def __createDatabaseIfNotExists(self):
+        if not path.exists(self.passwordModel.databasePath):
+            print('Create database and tables')
+            self.passwordModel.createTable()
+        
+        print('Database ininitalized')
 
     def __loadTableInfo(self):
         rows = self.__getTableItems()
@@ -94,9 +144,9 @@ class Manager:
             for y, item in enumerate(row):
                 self.__view.tblPasswords.setItem(x, y, item)
 
-        self.__view.tblPasswords.itemDoubleClicked.connect(self.__doubleClick)
+        self.__view.tblPasswords.itemDoubleClicked.connect(lambda : print('double click'))
         self.__view.tblPasswords.itemClicked.connect(self.__setSelectedCell)
-        
+
     def __getTableItems(self):
         passwords = self.passwordModel.getAll()
         tableRows = []
@@ -129,47 +179,5 @@ class Manager:
         
         return tableRows
 
-    def __createDatabaseIfNotExists(self):
-        if not path.exists(self.passwordModel.databasePath):
-            print('Create database and tables')
-            self.passwordModel.createTable()
-        
-        print('Database ininitalized')
-
-    def __savePassword(self):
-        password = (
-            self.__view.windowPasswordForm.txtService.text(),
-            self.__view.windowPasswordForm.txtWebsite.text(),
-            self.__view.windowPasswordForm.txtDescription.text(),
-            self.__view.windowPasswordForm.txtUser.text(),
-            self.__view.windowPasswordForm.txtPassword.text(),
-            self.__view.windowPasswordForm.txtKeyname.text(),
-        )
-
-        self.passwordModel.createOne(password)
-
-        self.__view.tblPasswords.clear()
-        self.__loadTableInfo()
-        self.__view.windowPasswordForm.close()
-    
-    def __updatePassword(self):
-        keyName = self.__view.windowPasswordForm.txtKeyname.text()
-        password = (
-            self.__view.windowPasswordForm.txtService.text(),
-            self.__view.windowPasswordForm.txtWebsite.text(),
-            self.__view.windowPasswordForm.txtDescription.text(),
-            self.__view.windowPasswordForm.txtUser.text(),
-            self.__view.windowPasswordForm.txtPassword.text()
-        )
-
-        self.passwordModel.updateOneByKeyName(password, keyName)
-
-        self.__view.tblPasswords.clear()
-        self.__loadTableInfo()
-        self.__view.windowPasswordForm.close()
-    
-    def __deletePassword(self, keyName):
-        self.passwordModel.deletePasswordByKeyName(keyName)
-
-        self.__view.tblPasswords.clear()
-        self.__loadTableInfo()
+    def __setSelectedCell(self, item):
+        self.selectedCell = (item.row(), item.column())
