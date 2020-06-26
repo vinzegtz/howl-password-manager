@@ -62,9 +62,7 @@ class Manager:
 
             self.__view.windowPasswordForm.cleanForm()
             self.__view.windowPasswordForm.txtPassword.setText(password.password)
-            self.__view.windowPasswordForm.btnUpdate.hide()
-            self.__view.windowPasswordForm.btnSave.show()
-            self.__view.windowPasswordForm.show()
+            self.__view.windowPasswordForm.showForCreate()
 
     def __clickEditActions(self, action):
         if action.text() == 'Edit password' and self.selectedCell != None:
@@ -72,9 +70,7 @@ class Manager:
             password = self.passwordModel.getPasswordByKeyName(keyName)
             
             self.__view.windowPasswordForm.fillForm(password)
-            self.__view.windowPasswordForm.btnUpdate.show()
-            self.__view.windowPasswordForm.btnSave.hide()
-            self.__view.windowPasswordForm.show()
+            self.__view.windowPasswordForm.showForUpdate()
         elif action.text() == 'Delete password' and self.selectedCell != None:
             keyName = self.__view.tblPasswords.item(self.selectedCell[0], 5).text()
             
@@ -118,12 +114,14 @@ class Manager:
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__view.windowPasswordForm.close()
+        self.__cleanSelectedCell()
 
     def __deletePasswordInDB(self, keyName):
         self.passwordModel.deletePasswordByKeyName(keyName)
 
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
+        self.__cleanSelectedCell()
 
     '''
     Table logic
@@ -181,3 +179,6 @@ class Manager:
 
     def __setSelectedCell(self, item):
         self.selectedCell = (item.row(), item.column())
+    
+    def __cleanSelectedCell(self):
+        self.selectedCell = None

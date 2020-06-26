@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QWidget
 
 # Class to create the main window interface
 class WindowManager(QMainWindow):
+
     def __init__(self):
         super().__init__()
 
@@ -141,6 +142,7 @@ class WindowManager(QMainWindow):
 
 
 class WindowPasswordForm(QMainWindow):
+ 
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -155,7 +157,7 @@ class WindowPasswordForm(QMainWindow):
 
         # Create GUI
         self.__createForm()
-    
+
     def __createForm(self):
         self.lytForm = QVBoxLayout()
 
@@ -204,7 +206,7 @@ class WindowPasswordForm(QMainWindow):
         self.lytForm.addWidget(self.btnUpdate)
 
         self.lytGeneral.addLayout(self.lytForm)
-    
+
     def cleanForm(self):
         self.txtService.setText('')
         self.txtWebsite.setText('')
@@ -214,7 +216,7 @@ class WindowPasswordForm(QMainWindow):
         self.txtKeyname.setText('')
         
         self.txtService.setFocus()
-    
+
     def fillForm(self, password):
         self.txtService.setText(password[1])
         self.txtWebsite.setText(password[2])
@@ -224,3 +226,13 @@ class WindowPasswordForm(QMainWindow):
         self.txtKeyname.setText(password[6])
         
         self.txtService.setFocus()
+
+    def showForCreate(self):
+        self.btnUpdate.hide()
+        self.btnSave.show()
+        self.show()
+
+    def showForUpdate(self):
+        self.btnUpdate.show()
+        self.btnSave.hide()
+        self.show()
