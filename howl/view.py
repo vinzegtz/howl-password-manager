@@ -235,4 +235,5 @@ class WindowPasswordForm(QMainWindow):
     def showForUpdate(self):
         self.btnUpdate.show()
         self.btnSave.hide()
+        self.txtKeyname.setReadOnly(True)
         self.show()
