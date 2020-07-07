@@ -31,7 +31,7 @@ class WindowManager(QMainWindow):
 
         # Other windows
         self.windowPasswordForm = WindowPasswordForm(self)
-        self.windowDatabasePath = WindowDatabasePath(self)
+        self.windowDatabasePathForm = WindowDatabasePath(self)
 
         # Create GUI
         self.__createHeader()

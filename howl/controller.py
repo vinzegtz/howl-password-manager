@@ -33,6 +33,7 @@ class Manager:
 
         self.__connectSignalsToolBar()
         self.__connectSignalsPasswordForm()
+        self.__connectSignalsDatabasePathForm()
  
     def __setRandomPassword(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
@@ -68,7 +69,7 @@ class Manager:
                 self.__deletePasswordAction()
         
         if action.text() == 'Change DB path':
-            self.__view.windowDatabasePath.showForUpdate()
+            self.__view.windowDatabasePathForm.showForUpdate()
 
     def __newPasswordAction(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
@@ -135,6 +136,15 @@ class Manager:
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__cleanSelectedCell()
+
+    '''
+    Database path form logic
+    '''
+    def __connectSignalsDatabasePathForm(self):
+        self.__view.windowDatabasePathForm.btnSave.clicked.connect(self.__updateDatabasePath)
+
+    def __updateDatabasePath(self):
+        print('save')
 
     '''
     Table logic
