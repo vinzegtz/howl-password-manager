@@ -68,7 +68,7 @@ class Manager:
                 self.__deletePasswordAction()
         
         if action.text() == 'Change DB path':
-                self.__view.windowDatabasePath.show()
+            self.__view.windowDatabasePath.showForUpdate()
 
     def __newPasswordAction(self):
         password = Password(length=32, level=PasswordLevel.FOUR)
