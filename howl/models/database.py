@@ -1,15 +1,12 @@
 import sqlite3
 from os import path
+from config import config
 
 
 class DatabaseConnection:
     
     def __init__(self):
-        databaseConfigFolder = 'database'
-        databaseName = 'howldb.db'
-        projectPath = path.abspath(path.dirname('app.py'))
-        
-        self.databasePath = path.join(projectPath, f'{databaseConfigFolder}/{databaseName}')
+        self.databasePath = config.DATABASE_PATH
         self.connection = None
         self.cursor = None
     
