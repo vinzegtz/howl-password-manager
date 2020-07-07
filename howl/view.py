@@ -30,6 +30,7 @@ class WindowManager(QMainWindow):
 
         # Other windows
         self.windowPasswordForm = WindowPasswordForm(self)
+        self.windowDatabasePath = WindowDatabasePath(self)
 
         # Create GUI
         self.__createHeader()
@@ -237,3 +238,36 @@ class WindowPasswordForm(QMainWindow):
         self.btnSave.hide()
         self.txtKeyname.setReadOnly(True)
         self.show()
+
+
+class WindowDatabasePath(QMainWindow):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.setWindowTitle('Database Path')
+        self.setFixedSize(500, 100)
+
+        self.lytGeneral = QVBoxLayout()
+        self.wgtCentral = QWidget(self)
+
+        self.wgtCentral.setLayout(self.lytGeneral)
+        self.setCentralWidget(self.wgtCentral)
+
+        # Create GUI
+        self.__createForm()
+    
+    def __createForm(self):
+        self.lytForm = QVBoxLayout()
+        self.lblDatabasePath = QLabel()
+        self.txtDatabasePath = QLineEdit()
+        self.btnSave = QPushButton()
+
+        self.lblDatabasePath.setText('Database path')
+        self.btnSave.setText('Save')
+
+        self.lytForm.addWidget(self.lblDatabasePath)
+        self.lytForm.addWidget(self.txtDatabasePath)
+        self.lytForm.addWidget(self.btnSave)
+
+        self.lytGeneral.addLayout(self.lytForm)
