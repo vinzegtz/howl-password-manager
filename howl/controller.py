@@ -150,7 +150,14 @@ class Manager:
         self.__view.windowDatabasePathForm.btnSave.clicked.connect(self.__updateDatabasePath)
 
     def __updateDatabasePath(self):
-        print('save')
+        newDatabasePath = self.__view.windowDatabasePathForm.txtDatabasePath.text()
+
+        Config.saveDatabaseConfig(path=newDatabasePath)
+        self.__view.windowDatabasePathForm.close()
+
+        self.__view.tblPasswords.clear()
+        self.__loadTableInfo()
+        self.__cleanSelectedCell()
 
     '''
     Table logic

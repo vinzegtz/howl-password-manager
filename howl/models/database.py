@@ -6,14 +6,20 @@ class DatabaseConnection:
     
     def __init__(self):
         databaseConfig = Config.loadDatabaseConfig()
-        
+
         self.databasePath = databaseConfig['path']
         self.connection = None
         self.cursor = None
     
     def openConnection(self):
+        self.__updateDatabasePath()
+
         self.connection = sqlite3.connect(self.databasePath)
         self.cursor = self.connection.cursor()
 
     def closeConnection(self):
         self.connection.close()
+    
+    def __updateDatabasePath(self):
+        databaseConfig = Config.loadDatabaseConfig()
+        self.databasePath = databaseConfig['path']

@@ -25,3 +25,14 @@ class Config:
             config = json.load(f)
         
         return config['database']
+    
+    @staticmethod
+    def saveDatabaseConfig(**kwargs):
+        with open(Config.configFilePath) as f:
+            config = json.load(f)
+        
+        for key, value in kwargs.items():
+            config['database'][key] = value
+        
+        with open(Config.configFilePath, 'w+') as f:
+            json.dump(config, f)
