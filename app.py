@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 
 from howl.controller import Manager
-from howl.view import WindowManager
+from howl.views.window_manager import WindowManager
 
 
 # Client
