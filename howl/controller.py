@@ -5,15 +5,21 @@ from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QTableWidgetItem
 
 from .models.password import PasswordModel
+from .config.config import Config
 
 
 # Class to manage the logic and flow of the main window
 class Manager:
 
     def __init__(self, view, application):
+        # Create config file
+        if not path.exists(Config.configFilePath):
+            print('Create config file')
+            Config.createConfigFile()
+
         self.selectedCell = None
         self.passwordModel = PasswordModel()
-
+        
         self.__view = view
         self.__application = application
         self.__clipBoard = application.clipboard()

@@ -1,12 +1,13 @@
 import sqlite3
 from os import path
-from config import config
-
+from ..config.config import Config
 
 class DatabaseConnection:
     
     def __init__(self):
-        self.databasePath = config.DATABASE_PATH
+        databaseConfig = Config.loadDatabaseConfig()
+        
+        self.databasePath = databaseConfig['path']
         self.connection = None
         self.cursor = None
     

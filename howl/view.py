@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QTableWidget
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QWidget
-from config import config
+
+from .config.config import Config
 
 
 # Class to create the main window interface
@@ -274,6 +275,7 @@ class WindowDatabasePath(QMainWindow):
         self.lytGeneral.addLayout(self.lytForm)
     
     def showForUpdate(self):
-        print(config.DATABASE_PATH)
-        self.txtDatabasePath.setText(config.DATABASE_PATH)
+        databaseConfig = Config.loadDatabaseConfig()
+
+        self.txtDatabasePath.setText(databaseConfig['path'])
         self.show()
