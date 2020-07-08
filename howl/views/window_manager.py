@@ -130,7 +130,9 @@ class WindowManager(QMainWindow):
         self.menuItemFile.addAction(self.menuItemActionNewPassword)
 
         self.menuItemEdit = menuBar.addMenu('Edit')
-        self.menuItemEdit.addAction('Change DB path')
+        self.menuItemActionEditDBPath = QAction('Change DB path', self)
+        self.menuItemActionEditDBPath.setShortcut('Ctrl+P')
+        self.menuItemEdit.addAction(self.menuItemActionEditDBPath)
         self.menuItemActionEditPassword = QAction('Edit password', self)
         self.menuItemActionEditPassword.setShortcut('Ctrl+E')
         self.menuItemEdit.addAction(self.menuItemActionEditPassword)
