@@ -107,7 +107,7 @@ class WindowManager(QMainWindow):
         self.lblPasswordsTableStatusMessage = QLabel()
 
         self.tblPasswords.setColumnCount(6)
-        self.tblPasswords.setHorizontalHeaderLabels(tableLabels)
+        
         self.lblPasswordsTableStatusTitle.setText('Status: ')
         self.lblPasswordsTableStatusMessage.setText('-----')
         self.lblPasswordsTableStatusTitle.setAlignment(Qt.AlignRight)
@@ -144,3 +144,15 @@ class WindowManager(QMainWindow):
         self.menuItemActionAbout = QAction('About', self)
         self.menuItemActionAbout.setShortcut('Ctrl+R')
         self.menuItemHelp.addAction(self.menuItemActionAbout)
+
+    def setTableLabels(self):
+        tableLabels = (
+            'Service',
+            'Website',
+            'Description',
+            'User',
+            'Password',
+            'Key name'
+        )
+
+        self.tblPasswords.setHorizontalHeaderLabels(tableLabels)

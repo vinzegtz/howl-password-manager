@@ -171,7 +171,8 @@ class Manager:
 
     def __loadTableInfo(self):
         rows = self.__getTableItems()
-        
+
+        self.__view.setTableLabels()
         self.__view.tblPasswords.setRowCount(len(rows))
 
         for x, row in enumerate(rows):
