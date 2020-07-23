@@ -95,6 +95,7 @@ class WindowPasswordForm(QMainWindow):
     def showForCreate(self):
         self.btnUpdate.hide()
         self.btnSave.show()
+        self.txtKeyname.setReadOnly(False)
         self.show()
 
     def showForUpdate(self):
