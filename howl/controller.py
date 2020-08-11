@@ -113,11 +113,16 @@ class Manager:
             self.__view.windowPasswordForm.txtKeyname.text(),
         )
 
-        self.passwordModel.createOne(password)
+        if not self.__isValidForm(self.__view.windowPasswordForm):
+            self.__view.windowPasswordForm.lblValidation.setVisible(True)
+        else:
+            self.__view.windowPasswordForm.lblValidation.setVisible(False)
 
-        self.__view.tblPasswords.clear()
-        self.__loadTableInfo()
-        self.__view.windowPasswordForm.close()
+            self.passwordModel.createOne(password)
+
+            self.__view.tblPasswords.clear()
+            self.__loadTableInfo()
+            self.__view.windowPasswordForm.close()
 
     def __updatePasswordInDB(self):
         keyName = self.__view.windowPasswordForm.txtKeyname.text()
@@ -129,12 +134,17 @@ class Manager:
             self.__view.windowPasswordForm.txtPassword.text()
         )
 
-        self.passwordModel.updateOneByKeyName(password, keyName)
+        if not self.__isValidForm(self.__view.windowPasswordForm):
+            self.__view.windowPasswordForm.lblValidation.setVisible(True)
+        else:
+            self.__view.windowPasswordForm.lblValidation.setVisible(False)
+            
+            self.passwordModel.updateOneByKeyName(password, keyName)
 
-        self.__view.tblPasswords.clear()
-        self.__loadTableInfo()
-        self.__view.windowPasswordForm.close()
-        self.__cleanSelectedCell()
+            self.__view.tblPasswords.clear()
+            self.__loadTableInfo()
+            self.__view.windowPasswordForm.close()
+            self.__cleanSelectedCell()
 
     def __deletePasswordInDB(self, keyName):
         self.passwordModel.deletePasswordByKeyName(keyName)
@@ -142,6 +152,23 @@ class Manager:
         self.__view.tblPasswords.clear()
         self.__loadTableInfo()
         self.__cleanSelectedCell()
+
+    def __isValidForm(self, passwordForm):
+        isValid = True
+        fields = {
+            'service': passwordForm.txtService.text(),
+            'website': passwordForm.txtWebsite.text(),
+            'description': passwordForm.txtDescription.text(),
+            'user': passwordForm.txtUser.text(),
+            'password': passwordForm.txtPassword.text(),
+            'keyname': passwordForm.txtKeyname.text()
+        }
+
+        for key, value in fields.items():
+            if value == '':
+                isValid = False
+        
+        return isValid
 
     '''
     Database path form logic
