@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMainWindow
@@ -12,7 +13,7 @@ class WindowPasswordForm(QMainWindow):
         super().__init__(parent)
 
         self.setWindowTitle('Password Management')
-        self.setFixedSize(400, 360)
+        self.setFixedSize(400, 420)
         
         self.lytGeneral = QVBoxLayout()
         self.wgtCentral = QWidget(self)
@@ -24,7 +25,9 @@ class WindowPasswordForm(QMainWindow):
         self.__createForm()
 
     def __createForm(self):
+        self.lytFormGeneral = QVBoxLayout()
         self.lytForm = QVBoxLayout()
+        self.lytActions = QVBoxLayout()
 
         self.lblService = QLabel()
         self.lblWebsite = QLabel()
@@ -32,6 +35,7 @@ class WindowPasswordForm(QMainWindow):
         self.lblUser = QLabel()
         self.lblPassword = QLabel()
         self.lblKeyname = QLabel()
+        self.lblValidation = QLabel()
 
         self.txtService = QLineEdit()
         self.txtWebsite = QLineEdit()
@@ -50,9 +54,12 @@ class WindowPasswordForm(QMainWindow):
         self.lblUser.setText('User')
         self.lblPassword.setText('Password')
         self.lblKeyname.setText('Keyname')
-        # self.btnGeneratePassword.setText('Generate pass')
+        self.lblValidation.setText('Please review the form. There can be no empty fields.')
         self.btnSave.setText('Save')
         self.btnUpdate.setText('Update')
+
+        self.lblValidation.setStyleSheet('margin-top: 10px; margin-bottom: 10px; color: #B90E0A')
+        self.lblValidation.setVisible(False)
 
         self.lytForm.addWidget(self.lblService)
         self.lytForm.addWidget(self.txtService)
@@ -66,11 +73,15 @@ class WindowPasswordForm(QMainWindow):
         self.lytForm.addWidget(self.txtPassword)
         self.lytForm.addWidget(self.lblKeyname)
         self.lytForm.addWidget(self.txtKeyname)
-        # self.lytForm.addWidget(self.btnGeneratePassword)
-        self.lytForm.addWidget(self.btnSave)
-        self.lytForm.addWidget(self.btnUpdate)
+        self.lytForm.setAlignment(Qt.AlignTop)
 
-        self.lytGeneral.addLayout(self.lytForm)
+        self.lytActions.addWidget(self.lblValidation)
+        self.lytActions.addWidget(self.btnSave)
+        self.lytActions.addWidget(self.btnUpdate)
+        
+        self.lytFormGeneral.addLayout(self.lytForm)
+        self.lytFormGeneral.addLayout(self.lytActions)
+        self.lytGeneral.addLayout(self.lytFormGeneral)
 
     def cleanForm(self):
         self.txtService.setText('')
