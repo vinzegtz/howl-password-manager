@@ -11,7 +11,7 @@ class Config:
         configDatabase = {}
 
         configProject['path'] = path.abspath(path.dirname('app.py'))
-        configDatabase['path'] = path.join(configProject['path'], 'database/howldb.db')
+        configDatabase['path'] = path.join(configProject['path'], 'database/howl.db')
 
         config['project'] = configProject
         config['database'] = configDatabase
